@@ -12,7 +12,12 @@ while true
         break;
     end
     data = split(line,' ');
-    type = char(data(1));
+    data(cellfun('isempty',data)) = [];
+    if ~isempty(data)
+       type = char(data(1));
+    else
+       type = 'nothing'; 
+    end
     switch type
         case 'v' % vertex
             V = [V; [str2double(data(2)),str2double(data(3)),str2double(data(4))]];
