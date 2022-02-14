@@ -1,4 +1,4 @@
-function [V,F] = read_OBJ(filename)
+function [V,F] = readObj(filename)
 %   read_OBJ : .obj kiterjesztesu fileok beolvasasa
 %   filename : .obj kiterjesztesu file
 %   V : csucsok (vertices)
