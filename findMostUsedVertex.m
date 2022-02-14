@@ -15,7 +15,6 @@ for i = 1:number_of_vertices
     vertex_uses(i) = sum(idx(:));
 end
 
-disp(vertex_uses)
 [~,idx] = max(vertex_uses);
 
 end
