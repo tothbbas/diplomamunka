@@ -10,11 +10,12 @@ function [outV,outF,boundaryV] = deleteVertexAndCorrespondingFaces(inV,inF,idx)
 %   megváltozhat!
 
 % boundaryV
-lineindexes = any(inF == idx, 2);
-lines = inF(lineindexes,:);
-neighborvertices = unique(lines);
-boundaryV = neighborvertices(neighborvertices ~= idx);
-boundaryV(boundaryV == length(inF)) = idx;
+lineindexes = any(inF == idx, 2);   % sorindexek, amikben szerepel a megadott vertex
+lines = inF(lineindexes,:);         % sorok
+neighborvertices = unique(lines);   % szomszédos csúcsok és az idx csúcs
+boundaryV = neighborvertices(neighborvertices ~= idx);  % csak szomszédos csúcsok
+boundaryV(boundaryV == length(inF)) = idx;  
+% az idx-ediket töröljük és betesszük oda az utolsót, így az utolsó elemet átindexeljük a törölt sorra. lsd.: továbbiak
 
 % Töröljük azon lapokat, amikhez hozzátartozik a törölt csúcs
 outF = inF(~any(inF == idx,2),:);

@@ -7,6 +7,8 @@ else
     number_of_vertices = max(max(F));
 end
 
+% leszámoljuk, melyik vertexet hányszor használtuk, majd kiválasztjuk a
+% leggyakoribban használtat
 vertex_uses = zeros(1,number_of_vertices);
 for i = 1:number_of_vertices
     idx = (F == i);
