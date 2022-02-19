@@ -3,7 +3,7 @@ function n = getNumberOfNeighbors(idx,F)
 %   idx : csúcs indexe
 %   F : faces (lapok mátrixa)
 
-n = length(unique(F(sum(F == idx, 2) > 0, :)));
+n = length(unique(F(sum(F == idx, 2) > 0, :))) - 1; % -1 "önmaga" miatt
 
 end
 

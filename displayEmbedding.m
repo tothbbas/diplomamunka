@@ -11,7 +11,6 @@ end
 X = V(:,1);
 Y = V(:,2);
 Z = zeros(length(V),1);
-disp([X Y])
 trisurf(F,X,Y,Z,'FaceColor',c);
 lighting phong;
 camproj('perspective');
