@@ -58,7 +58,7 @@ C = boundary_points;
 
 Y = D1 - A1;
 Z = B*C;
-X = Y/Z;
+X = Y\Z;
 
 outV = zeros(length(V),2);
 outV(boundary_indices,:) = boundary_points;
