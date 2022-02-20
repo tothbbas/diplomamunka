@@ -16,12 +16,12 @@ end
 boundary_indices = getVertexNeighbors(delete_index,inF);
 boundary_indices(boundary_indices == length(inV)) = delete_index; % a törlés után változik az indexelés
 [V,F,B] = deleteVertexAndCorrespondingFaces(inV,inF,delete_index);
+[V,F,boundary_indices] = OrderVertexes(V,F,boundary_indices);
 unknown_indices = setdiff((1:length(V)),boundary_indices)';
 k = length(B);
 boundary_points = [cos((2*(1:k)*pi)/k);sin(2*(1:k)*pi/k)]';
 
 % Ordering
-
 
 if debug
     disp(unknown_indices)
@@ -36,7 +36,7 @@ D = zeros(length(V)+1);
 for i = 1:length(V)
     neighbors = getVertexNeighbors(i,inF);
     A(i,neighbors) = 1;
-    di = getNumberOfNeighbors(i,inF); % szerintem nem lesz baj a fokszámmal, mert csak belső csúcsokra kérjük le!
+    di = getNumberOfNeighbors(i,inF);
     D(i,i) = di;
 end
 
