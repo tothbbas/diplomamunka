@@ -13,56 +13,55 @@ else
     debug = 0;
 end
 
-boundary_indices = getVertexNeighbors(delete_index,inF);
+% get boundary indices, neighbors of the deleted vertex (in correct order);
+boundary_indices = getVertexNeighborsInOrder(delete_index,inF);
 boundary_indices(boundary_indices == length(inV)) = delete_index; % a törlés után változik az indexelés
-[V,F,B] = deleteVertexAndCorrespondingFaces(inV,inF,delete_index);
-[V,F,boundary_indices] = OrderVertexes(V,F,boundary_indices);
-unknown_indices = setdiff((1:length(V)),boundary_indices)';
-k = length(B);
-boundary_points = [cos((2*(1:k)*pi)/k);sin(2*(1:k)*pi/k)]';
-
-% Ordering
-
-if debug
-    disp(unknown_indices)
-    disp(boundary_indices)
-    disp(boundary_points)
-    pause()
+[V,F,~] = deleteVertexAndCorrespondingFaces(inV,inF,delete_index);
+N = length(V);
+n = length(boundary_indices);   % boundary points
+k = N - n;  % inner points
+for i = 1:n
+   % swap boundary vertexes to the end of the V vertex array
+   old = boundary_indices(i);
+   new = k+i;
+   if any(boundary_indices==new)
+      idx = boundary_indices==new;
+      boundary_indices(idx) = old;
+   end
+   V([old,new],:) = V([new,old],:);
+   boundary_indices(i) = new;
+   F(F == old) = -1;
+   F(F == new) = old;
+   F(F == -1) = new;
 end
 
-A = zeros(length(V)+1);
-D = zeros(length(V)+1);
+A = zeros(N+1);
+D = zeros(N+1);
 
-for i = 1:length(V)
-    neighbors = getVertexNeighbors(i,inF);
+for i = 1:N
+    neighbors = getVertexNeighbors(i,F);
     A(i,neighbors) = 1;
-    di = getNumberOfNeighbors(i,inF);
+    di = getNumberOfNeighbors(i,F);
+    if any(boundary_indices==1)
+        di = di + 1;
+    end
     D(i,i) = di;
 end
 
-D = D(1:length(V),1:length(V));
-A = A(1:length(V),1:length(V));
+D = D(1:N,1:N);
+A = A(1:N,1:N);
+boundary_points = [cos((2*(1:n)*pi)/n);sin(2*(1:n)*pi/n)]';
 
-A1 = A;
-A1(boundary_indices,:) = [];
-A1(:,boundary_indices) = [];
-D1 = D;
-D1(boundary_indices,:) = [];
-D1(:,boundary_indices) = [];
-
-B = A;
-B(:,unknown_indices) = [];
-B(boundary_indices,:) = [];
-
+A1 = A(1:k,1:k);    % inner points
+D1 = D(1:k,1:k);    % inner points
+B = A(1:k,k+1:N);
 C = boundary_points;
 
 Y = D1 - A1;
 Z = B*C;
 X = Y\Z;
 
-outV = zeros(length(V),2);
-outV(boundary_indices,:) = boundary_points;
-outV(unknown_indices,:) = X;
+outV = [X;boundary_points];
 outF = F;
 end
 
