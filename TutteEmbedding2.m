@@ -1,16 +1,15 @@
-function [outV, outF] = TutteEmbedding2(inV,inF,findmostusedvertice,debug)
+function [outV, outF] = TutteEmbedding2(inV,inF,weights,findmostusedvertice)
 % Tutte-féle beágyazás elkészítése
 %   inV : bemeneti csúcsok 
 %   inF : bemeneti lapok
+%   weights : az A szomszédsági mátrix súlyait adjuk meg:
+%       - u : uniform (default : ettől különböző karakter is ezt eredményezi)
+%       - h : harmonic / cotangent
+%       - m : mean-value (Floater)
 if nargin > 3
-    debug = 1;
     delete_index = findMostUsedVertex(inF);
-elseif nargin > 2
-    delete_index = findMostUsedVertex(inF);
-    debug = 0;
 else
     delete_index = 1;
-    debug = 0;
 end
 
 % get boundary indices, neighbors of the deleted vertex (in correct order);
@@ -35,21 +34,14 @@ for i = 1:n
    F(F == -1) = new;
 end
 
-A = zeros(N+1);
-D = zeros(N+1);
-
-for i = 1:N
-    neighbors = getVertexNeighbors(i,F);
-    A(i,neighbors) = 1;
-    di = getNumberOfNeighbors(i,F);
-    if any(boundary_indices==1)
-        di = di + 1;
-    end
-    D(i,i) = di;
+if ismember(weights,'h')
+    [A,D] = getMatrixHarmonicWeights(V,F,boundary_indices);
+elseif ismember(weights,'m')
+    [A,D] = getMatrixMeanValueWeights(V,F,boundary_indices);
+else
+    [A,D] = getMatrixUniformWeight(F,N,boundary_indices);
 end
 
-D = D(1:N,1:N);
-A = A(1:N,1:N);
 boundary_points = [cos((2*(1:n)*pi)/n);sin(2*(1:n)*pi/n)]';
 
 A1 = A(1:k,1:k);    % inner points
