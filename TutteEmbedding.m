@@ -4,6 +4,7 @@ function [outV, outF] = TutteEmbedding(inV,inF,findmostusedvertice,debug)
 %   inF : bemeneti lapok
 if nargin > 3
     debug = 1;
+    delete_index = findMostUsedVertex(inF);
 elseif nargin > 2
     delete_index = findMostUsedVertex(inF);
     debug = 0;
@@ -12,67 +13,37 @@ else
     debug = 0;
 end
 
+% get boundary indices, neighbors of the deleted vertex (in correct order);
 boundary_indices = getVertexNeighbors(delete_index,inF);
 boundary_indices(boundary_indices == length(inV)) = delete_index; % a törlés után változik az indexelés
-[V,F,B] = deleteVertexAndCorrespondingFaces(inV,inF,delete_index);
-k = length(B);
-boundary_points = [cos((2*(1:k)*pi)/k);sin(2*(1:k)*pi/k)]';
-
-if debug
-    disp(boundary_indices)
-    disp(boundary_points)
-    pause()
+[V,F,~] = deleteVertexAndCorrespondingFaces(inV,inF,delete_index);
+N = length(V);
+n = length(boundary_indices);   % boundary points
+k = N - n;  % inner points
+disp(boundary_indices)
+disp(V)
+for i = 1:n
+   % ITT A HIBA
+   % swap boundary vertexes to the end of the V vertex array
+   
+   
+   
+   old = boundary_indices(i);
+   new = k+i;
+   V([old,new],:) = V([new,old],:);
+   if any(boundary_indices==new)
+      idx = find(boundary_indices==new);
+      boundary_indices(idx) = old;
+   end
+   boundary_indices(i) = new;
+   boundary_indices()
+   F(F == old) = -1;
+   F(F == new) = old;
+   F(F == -1) = new;
+   disp(boundary_indices')
 end
 
-A = zeros(length(V));
-% b = zeros(length(boundary_points),2);
-% b(boundary_indices,:) = boundary_points;
-
-for i = 1:length(V)
-    if sum(i == boundary_indices)
-        A(i,i) = 1;
-    else
-        neighbors = getVertexNeighbors(i,F);
-        di = getNumberOfNeighbors(i,F); % szerintem nem lesz baj a fokszámmal, mert csak belső csúcsokra kérjük le!
-        A(i,neighbors) = 1/di;
-    end
-end
-unknown_indices = setdiff((1:length(V)),boundary_indices);
-if debug
-    disp(A)
-    pause()
-end
-A(boundary_indices,:) = [];
-if debug
-    disp(A)
-    pause()
-end
-A(:,unknown_indices) = [];
-if debug
-    disp(A)
-    pause()
-end
-x = A/boundary_points';
-if debug
-    disp(x)
-    pause()
-end
-outV = zeros(length(V),2);
-if debug
-    disp(outV)
-    pause()
-end
-outV(boundary_indices,:) = boundary_points;
-if debug
-    disp(outV)
-    pause()
-end
-outV(unknown_indices,:) = x;
-if debug
-    disp(outV)
-    pause()
-end
+outV = V;
 outF = F;
 
 end
-
