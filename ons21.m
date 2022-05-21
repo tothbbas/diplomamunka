@@ -1,4 +1,5 @@
 function E = ons21(V,F)
+tic
 % Ortonormált rendszer létrehozása
 n = length(V);
 Y = eye(n);
@@ -36,6 +37,6 @@ end
 T=U/sqrt(D)*U';
 E=T*Y;
 
-
+toc
 end
 
