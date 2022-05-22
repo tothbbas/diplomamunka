@@ -8,7 +8,7 @@ function [I] = CalculateDot21_ver2(V,F,y,z)
 
 r = V(F(:,1),:)-V(F(:,3),:);
 s = V(F(:,2),:)-V(F(:,3),:);
-doubleAreas = r(:,1).*s(:,2) - r(:,2).*s(:,1);
+doubleAreas = abs(r(:,1).*s(:,2) - r(:,2).*s(:,1));
 I = 0;
 coeffs = [2 1 1; 1 2 1; 1 1 2];
 for i = 1:length(F)
