@@ -1,6 +1,7 @@
 function approx2(Vm,Va,V,Fm,Ea,E)
 % Legjobb kozelites eloallitasa
 %   Vm : mergelt alappontrendszer
+%   Fm : mergelt alappontrendszerhez tartozó lapok
 %   Va : kis elemszamu, approximalo alappontrendszer
 %   V : meshunk beagyazasa
 %   Ea : ortonormalt rendszer, az approximalo alappontrendszerrel
