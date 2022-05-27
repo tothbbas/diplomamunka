@@ -1,9 +1,11 @@
 function approx2(Vm,Va,V,Vold,Fm,Fa,Ea,E)
 % Legjobb kozelites eloallitasa
 %   Vm : mergelt alappontrendszer
-%   Fm : mergelt alappontrendszerhez tartozó lapok
 %   Va : kis elemszamu, approximalo alappontrendszer
 %   V : meshunk beagyazasa
+%   Vold : eredeti mesh 3D pontjai
+%   Fm : mergelt alappontrendszerhez tartozó lapok
+%   Fa : megjelenítéshez használt, 2D háromszögelése az approximációnak
 %   Ea : ortonormalt rendszer, az approximalo alappontrendszerrel
 %   E : ortonormalt rendszer, az eredeti meshunk szerint
 
