@@ -1,4 +1,4 @@
-function [outV, outF] = TutteEmbedding2(inV,inF,weights,findmostusedvertice)
+function [outV, outF, V, F] = TutteEmbedding2(inV,inF,weights,findmostusedvertice)
 % Tutte-féle beágyazás elkészítése
 %   inV : bemeneti csúcsok 
 %   inF : bemeneti lapok
