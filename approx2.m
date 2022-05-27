@@ -9,27 +9,27 @@ function approx2(Vm,Va,V,Vold,Fm,Fa,Ea,E)
 %   Ea : ortonormalt rendszer, az approximalo alappontrendszerrel
 %   E : ortonormalt rendszer, az eredeti meshunk szerint
 
-Out_a = evaluateBaseFunctionsOnMesh(Vm,Ea,Va);
-Out = evaluateBaseFunctionsOnMesh(Vm,E,V);
+Out_a = evaluateBaseFunctionsOnMesh(Vm,Ea,Va);  % random pontrendszer bázisfüggvényei, kiértékelve a merge-elt alappontrendszeren
+Out = evaluateBaseFunctionsOnMesh(Vm,E,V);  % eredeti beágyazás bázisfüggvényei kiértékelve a merge-elt alappontrendszeren
 n = size(Out_a,2);
 c = zeros(3,n);
-F_1 = scatteredInterpolant(V(:,1),V(:,2),Vold(:,1),'linear');
-F_2 = scatteredInterpolant(V(:,1),V(:,2),Vold(:,2),'linear');
-F_3 = scatteredInterpolant(V(:,1),V(:,2),Vold(:,3),'linear');
+F_1 = scatteredInterpolant(V(:,1),V(:,2),Vold(:,1),'linear'); % R^{2}-->R^{3} függvény 1. koordinátái
+F_2 = scatteredInterpolant(V(:,1),V(:,2),Vold(:,2),'linear'); % R^{2}-->R^{3} függvény 2. koordinátái
+F_3 = scatteredInterpolant(V(:,1),V(:,2),Vold(:,3),'linear'); % R^{2}-->R^{3} függvény 3. koordinátái
 Y = zeros(size(Out_a,1),3);
-Y(:,1) = F_1(Vm(:,1),Vm(:,2));
-Y(:,2) = F_2(Vm(:,1),Vm(:,2));
-Y(:,3) = F_3(Vm(:,1),Vm(:,2));
+Y(:,1) = F_1(Vm(:,1),Vm(:,2));  % R^{2}-->R^{3} függvény 1. koordinátái a merge-elt alappontrendszeren
+Y(:,2) = F_2(Vm(:,1),Vm(:,2));  % R^{2}-->R^{3} függvény 2. koordinátái a merge-elt alappontrendszeren
+Y(:,3) = F_3(Vm(:,1),Vm(:,2));  % R^{2}-->R^{3} függvény 3. koordinátái a merge-elt alappontrendszeren
 
 for i=1:n
-    % utolsó paraméterként az kéne, hogy amúgy az R^{2} --> R^{3}
-    % függvényünk hova képzi a pontot. (azaz a beágyazás inverzfüggvénye)
+    % együtthatók kiszámítása
     c(1,i) = CalculateDot21(Vm,Fm,Out_a(:,i),Y(:,1));
     c(2,i) = CalculateDot21(Vm,Fm,Out_a(:,i),Y(:,2));
     c(3,i) = CalculateDot21(Vm,Fm,Out_a(:,i),Y(:,3));
 end
 
 y = (c*Ea)';
+disp(size(y))
 displayObj(y,Fa)
 end
 
