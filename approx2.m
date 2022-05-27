@@ -27,8 +27,6 @@ for i=1:n
     c(3,i) = CalculateDot21(Vm,Fm,Out_a(:,i),Y(:,3));
 end
 
-displayEmbedding(Va,Fa)
-pause();
 y = (c*Ea)';
 displayObj(y,Fa)
 end
