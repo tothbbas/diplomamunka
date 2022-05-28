@@ -1,5 +1,4 @@
 function E = ons21(V,F)
-tic
 % Ortonormált rendszer létrehozása
 n = length(V);
 Y = eye(n);
@@ -11,7 +10,7 @@ end
 S=zeros(n,n);
 for i=1:n
     neighbor_indexes = getVertexNeighbors(i,F);
-    neighbor_indexes = [neighbor_indexes;i];
+    neighbor_indexes(end+1) = i;
     for j=1:length(neighbor_indexes)
         dp = CalculateDot21(V,F,Y(neighbor_indexes(j),:),Y(i,:));
         S(i,neighbor_indexes(j)) = dp;
@@ -23,6 +22,5 @@ end
 T=U/sqrt(D)*U';
 E=T*Y;
 
-toc
 end
 

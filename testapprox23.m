@@ -1,6 +1,9 @@
 tic
 
-init = false;
+addpaths
+
+init = true;
+bunny = false;
 
 if init
     % read objects
@@ -22,45 +25,60 @@ if init
     disp("ON systems created")
 end
 
-k = 50;
-MaxK = 200;
+if bunny  
+    k = 200;
+    MaxK = 1200;
 
-% disp("Sphere")
-% sphere
-% for i=k:10:MaxK
-%
-%     disp("Creating approximation, number of vertices:")   
-%     disp(i)
-%
-%     % random mesh
-%     [Vr,Fr] = createRandomMesh(i);
-%     Er = ons21(Vr,Fr);
-%     
-%     % merge
-%     [Vmerg,Fmerg] = mergeTriangulations(VoutS,FoutS,Vr,Fr,false);
-%     
-%     %approximation
-%     approx2(Vmerg,Vr,VoutS,VoldS,Fmerg,Fr,Er,Es)
-% end
+    % bunny
+    disp("Bunny")
+    for i=k:200:MaxK
+        % random mesh
 
-k = 500;
-MaxK = 1600;
+        disp("Creating approximation, number of vertices:")   
+        disp(i)
 
-% bunny
-disp("Bunny")
-for i=k:100:MaxK
-    % random mesh
+        [Vr,Fr] = createRandomMesh(i);
+        Er = ons21(Vr,Fr);
+        toc; tic;
 
-    disp("Creating approximation, number of vertices:")   
-    disp(i)
-    
-    [Vr,Fr] = createRandomMesh(i);
-    Er = ons21(Vr,Fr);
-    
-    % merge
-    [Vmerg,Fmerg] = mergeTriangulations(VoutB,FoutB,Vr,Fr,false);
-    
-    %approximation
-    approx2(Vmerg,Vr,VoutB,VoldB,Fmerg,Fr,Er,Ebun)
-    pause()
+        % merge
+        disp("Merging Triangulations")
+        [Vmerg,Fmerg] = mergeTriangulations(VoutB,FoutB,Vr,Fr,false);
+        toc; tic;
+
+        %approximation
+        disp("Creating Approximation")
+        approx2(Vmerg,Vr,VoutB,VoldB,Fmerg,Fr,Er,Ebun)
+        toc; tic;
+        pause()
+        disp("----------------------------------------------------------------")
+    end   
+else
+    k = 50;
+    MaxK = 200;
+
+    disp("Sphere")
+    for i=k:30:MaxK
+         disp("Creating approximation, number of vertices:")   
+         disp(i)
+
+         % random mesh
+         disp("Generate Random Points");
+         [Vr,Fr] = createRandomMesh(i);
+         Er = ons21(Vr,Fr);
+         toc; tic;
+
+         % merge
+         disp("Merging Triangulations");
+         [Vmerg,Fmerg] = mergeTriangulations(VoutS,FoutS,Vr,Fr,false);
+         toc; tic;
+         
+         %approximation
+         disp("Creating Approximation")
+         approx2(Vmerg,Vr,VoutS,VoldS,Fmerg,Fr,Er,Es)
+         toc; tic;
+         pause();
+         disp("----------------------------------------------------------------")
+    end    
 end
+
